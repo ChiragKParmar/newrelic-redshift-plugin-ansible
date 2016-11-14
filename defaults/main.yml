@@ -1,0 +1,10 @@
+newrelic_license_key: YOUR NEW RELIC LICENSE KEY
+newrelic_redshift_poll: 60
+newrelic_redshift_verbose: 1
+redshift_host: REDSHIFT HOST
+redshift_port: 5439
+redshift_user: REDSHIFT USER
+redshift_password: REDSHIFT PASSWORD
+redshift_dbname: REDSHIFT DB NAME
+redshift_label: 'Redshift' # This label is optional and will default to the server hostname - it shows up in the NewRelic Web UI
+redshift_schema: 'production' #Redshift schema you want the metrics for e.g. public etc.

@@ -1,0 +1,24 @@
+description "A job to start the new relic redshift plugin"
+
+# Stanzas
+#
+# Stanzas control when and how a process is started and stopped
+# See a list of stanzas here: http://upstart.ubuntu.com/wiki/Stanzas#respawn
+
+# When to start the service
+start on filesystem or runlevel[2345]
+
+# When to stop the service
+stop on shutdown
+
+# Changes to the user -ubuntu before running the job's process.
+setuid ubuntu
+
+# Automatically restart process, if crashed
+respawn
+
+# Start the process
+script
+cd /home/vagrant/opt/newrelic/redshift/gems/newrelic_redshift_plugin-1.0.0
+exec ./bin/redshift_plugin run
+end script

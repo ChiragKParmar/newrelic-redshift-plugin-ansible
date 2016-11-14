@@ -1,0 +1,46 @@
+- name: remove old version of ruby
+  command: aptitude -y purge ruby
+
+- name: ensure apt cache is up to date
+  apt: update_cache=yes
+
+- name: Install ruby 2.0
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - ruby2.0
+    - ruby2.0-dev
+
+- name: Symlink exists for Ruby 2.0
+  file: src=/usr/bin/ruby2.0 dest=/usr/local/bin/ruby state=link
+
+- name: Symlink exists for Ruby Gems 2.0
+  file: src=/usr/bin/gem2.0 dest=/usr/local/bin/gem state=link
+
+- name: Install libpq dev package
+  apt: name=libpq-dev state=latest update_cache=yes
+
+- name : Create an installation directory (e.g. /opt/newrelic/redshift ).
+  file: path=opt/newrelic/redshift state=directory
+
+- name: Install Bundler
+  command: gem install bundler
+
+- name: Install ruby daemon gem
+  command: gem install daemons
+
+- name: Install newrelic redshift plugin
+  command: gem install newrelic_redshift_plugin -i 'opt/newrelic/redshift/' --no-ri --no-rdoc
+
+- name: Run bundle install for installing dependencies (if any)
+  bundler: state=present gemfile=opt/newrelic/redshift/gems/newrelic_redshift_plugin-1.0.0/Gemfile
+
+- name: copy yml config from default file
+  template: src=newrelic_plugin.yml.j2 dest=./opt/newrelic/redshift/gems/newrelic_redshift_plugin-1.0.0/config/newrelic_plugin.yml
+
+- name: Change ownership "newrelic_plugin"
+  file: path=/home/{{newrelic_user}}/opt/ state=directory group={{newrelic_user}} owner={{newrelic_user}} recurse=yes
+
+- name: Copy new relic redshift upstart file
+  template: src=newrelic_redshift.conf.j2 dest=/etc/init/newrelic_plugin.conf
+  notify:
+      - restart newrelic_plugin

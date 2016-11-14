@@ -1,0 +1,30 @@
+# Please make sure to update the license_key information with the license key for your New Relic
+# account.
+#
+#
+newrelic:
+  #
+  # Update with your New Relic account license key:
+  #
+  license_key: {{newrelic_license_key}}
+
+  #Set the polling cycle (unit in seconds)
+  poll: {{newrelic_redshift_poll}}
+  #
+  # Set to '1' for verbose output, remove for normal output.
+  # All output goes to stdout/stderr.
+  #
+  # verbose: {{newrelic_redshift_verbose}}
+#
+# Agent Configuration:
+#
+agents:
+  # this is where configuration for agents belongs
+  redshift:
+    host: {{redshift_host}}
+    port: {{redshift_port}}
+    user: {{redshift_user}}
+    password: {{redshift_password}}
+    dbname: {{redshift_dbname}}
+    label: {{redshift_label}} # This label is optional and will default to the server hostname - it shows up in the NewRelic Web UI
+    schema: {{redshift_schema}} #Redshift schema name you want the metrics for
